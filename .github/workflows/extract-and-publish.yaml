@@ -3,6 +3,10 @@ name: Extract and publish
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pull-requests: write
+
 env:
   APIOPS_RELEASE: v4.1.3
 
