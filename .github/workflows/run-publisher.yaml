@@ -46,6 +46,9 @@ jobs:
             Write-Information "Setting configuration YAML path..."
             "CONFIGURATION_YAML_PATH=$configurationYamlPath" >> $env:GITHUB_ENV
           }
+
+          $serviceNames = ${{ fromJson(vars) }}
+          Write-Information "$serviceNames"
         shell: pwsh
 
       # - name: Set variables
