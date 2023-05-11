@@ -1,6 +1,6 @@
 {
   "properties": {
-    "apiRevision": "2",
+    "apiRevision": "1",
     "authenticationSettings": {},
     "contact": {
       "email": "apiteam@swagger.io",
@@ -9,7 +9,6 @@
     },
     "description": "A sample API that uses a petstore as an example to demonstrate features in the OpenAPI 3.0 specification",
     "displayName": "Swagger Petstore",
-    "isCurrent": true,
     "license": {
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
