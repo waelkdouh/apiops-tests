@@ -34,10 +34,17 @@ jobs:
           $VerbosePreference = "Continue"
           $InformationPreference = "Continue"
           
-          if (${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }} -eq "true")
+          if ("${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }}" -eq "true")
           {
             Write-Information "Setting commit ID..."
             "COMMIT_ID=${{ github.sha }}" >> $env:GITHUB_ENV          
+          }
+
+          $configurationYamlPath = Join-Path ${{ github.workspace }} "configuration.${{ matrix.environment }}.yaml"
+          if (Test-Path $configurationYamlPath)
+          { 
+            Write-Information "Setting configuration YAML path..."
+            "CONFIGURATION_YAML_PATH=$configurationYamlPath" >> $env:GITHUB_ENV
           }
         shell: pwsh
 
