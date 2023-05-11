@@ -24,8 +24,9 @@ jobs:
       matrix:
         environment: [dev, prod]
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
 
       - name: Set shared variables
         run: |
