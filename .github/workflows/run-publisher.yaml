@@ -34,7 +34,11 @@ jobs:
           $VerbosePreference = "Continue"
           $InformationPreference = "Continue"
           
-          Write-Information "Input is ${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }}"
+          if (${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }} -eq "true")
+          {
+            Write-Information "Setting commit ID..."
+            "COMMIT_ID=${{ github.sha }}" >> $env:GITHUB_ENV          
+          }
         shell: pwsh
 
       # - name: Set variables
