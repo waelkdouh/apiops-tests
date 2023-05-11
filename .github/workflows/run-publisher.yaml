@@ -34,20 +34,20 @@ jobs:
           $VerbosePreference = "Continue"
           $InformationPreference = "Continue"
 
-          Write-Information "Input is ${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }}"
-          if (${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }})
-          {
-            "COMMIT_ID=${{ github.sha }}" >> $env:GITHUB_ENV
-          }
+          # Write-Information "Input is ${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }}"
+          # if (${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }})
+          # {
+          #   "COMMIT_ID=${{ github.sha }}" >> $env:GITHUB_ENV
+          # }
 
-          $configurationYamlPath = Join-Path ${{ github.workspace }} "configuration.${{ matrix.environment }}.yaml"
-          if (Test-Path $configurationYamlPath)
-          { 
-            "CONFIGURATION_YAML_PATH=$configurationYamlPath" >> $env:GITHUB_ENV
-          }
+          # $configurationYamlPath = Join-Path ${{ github.workspace }} "configuration.${{ matrix.environment }}.yaml"
+          # if (Test-Path $configurationYamlPath)
+          # { 
+          #   "CONFIGURATION_YAML_PATH=$configurationYamlPath" >> $env:GITHUB_ENV
+          # }
 
-          $serviceNames = ${{ fromJson(vars)}}
-          Write-Information $serviceNames
+          # $serviceNames = ${{ fromJson(vars)}}
+          # Write-Information $serviceNames
         shell: pwsh
 
       # - name: Run extractor
