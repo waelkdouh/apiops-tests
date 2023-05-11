@@ -22,9 +22,11 @@ jobs:
           $InformationPreference = "Continue"
 
           Write-Information "Emptying artifacts folder..."
-          $artifactsFolderPath = Join-Path "$env:API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH" "*"
-          Remove-Item $artifactsFolderPath -Recurse -Force
-
+          if (Test-Path "$env:API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH")
+          {
+            $artifactsFolderPath = Join-Path "$env:API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH" "*"
+            Remove-Item $artifactsFolderPath -Recurse -Force
+          }
 
           Write-Information "Downloading extractor..."
           $extractorFileName = "${{ runner.os }}" -like "*win*" ? "extractor.win-x64.exe" : "extractor.linux-x64.exe"
