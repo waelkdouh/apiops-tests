@@ -48,7 +48,7 @@ jobs:
 
           $serviceNames = ${{ fromJson(vars)}}
           Write-Information $serviceNames
-      #   shell: pwsh
+        shell: pwsh
 
       # - name: Run extractor
       #   run: |
