@@ -48,7 +48,7 @@ jobs:
           }
 
           Write-Information "Setting API management service name..."
-          switch "${{ matrix.environment }}"
+          switch ("${{ matrix.environment }}")
           {
             "dev" { "API_MANAGEMENT_SERVICE_NAME=${{ vars.DEV_API_MANAGEMENT_SERVICE_NAME }}" >> $env:GITHUB_ENV }
             "prod" { "API_MANAGEMENT_SERVICE_NAME=${{ vars.PROD_API_MANAGEMENT_SERVICE_NAME }}" >> $env:GITHUB_ENV }
