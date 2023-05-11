@@ -47,80 +47,47 @@ jobs:
             "CONFIGURATION_YAML_PATH=$configurationYamlPath" >> $env:GITHUB_ENV
           }
 
-          $serviceNames = ${{ fromJson(vars) }}
-          Write-Information "$serviceNames"
+          Write-Information "Setting API management service name..."
+          switch "${{ matrix.environment }}"
+          {
+            "dev" { "API_MANAGEMENT_SERVICE_NAME=${{ vars.DEV_API_MANAGEMENT_SERVICE_NAME }}" >> $env:GITHUB_ENV }
+            "prod" { "API_MANAGEMENT_SERVICE_NAME=${{ vars.PROD_API_MANAGEMENT_SERVICE_NAME }}" >> $env:GITHUB_ENV }
+            default { throw "No value found for matrix environment."}
+          }
+
+          Write-Information "Setting artifacts folder..."
+          $artifactsFolderPath = Join-Path ${{ github.workspace }} "artifacts"
+          "API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH=$artifactsFolderPath" >> $env:GITHUB_ENV
+
         shell: pwsh
 
-      # - name: Set variables
-      #   run: |
-      #     Set-StrictMode -Version Latest
-      #     $ErrorActionPreference = "Stop"
-      #     $VerbosePreference = "Continue"
-      #     $InformationPreference = "Continue"
+      - name: Run publisher
+        run: |
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = "Stop"
+          $VerbosePreference = "Continue"
+          $InformationPreference = "Continue"
 
-      #     Write-Information "Input is ${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }}"
-      #     if (${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }})
-      #     {
-      #       "COMMIT_ID=${{ github.sha }}" >> $env:GITHUB_ENV
-      #     }
+          Write-Information "Downloading publisher..."
+          $publisherFileName = "${{ runner.os }}" -like "*win*" ? "publisher.win-x64.exe" : "publisher.linux-x64.exe"
+          $downloadUrl = "https://github.com/Azure/apiops/releases/download/${{ env.APIOPS_RELEASE }}/$publisherFileName"
+          $destinationFilePath = Join-Path "${{ runner.temp }}" "publisher.exe"
+          Invoke-WebRequest -Uri "$downloadUrl" -OutFile "$destinationFilePath"
 
-      #     # $configurationYamlPath = Join-Path ${{ github.workspace }} "configuration.${{ matrix.environment }}.yaml"
-      #     # if (Test-Path $configurationYamlPath)
-      #     # { 
-      #     #   "CONFIGURATION_YAML_PATH=$configurationYamlPath" >> $env:GITHUB_ENV
-      #     # }
+          if ("${{ runner.os }}" -like "*linux*")
+          {
+            Write-Information "Setting file permissions..."
+            & chmod +x "$destinationFilePath"
+            if ($LASTEXITCODE -ne 0) { throw "Setting file permissions failed."}
+          }
 
-      #     # $serviceNames = ${{ fromJson(vars)}}
-      #     # Write-Information $serviceNames
-      #   shell: pwsh
-
-      # - name: Run extractor
-      #   run: |
-      #     Set-StrictMode -Version Latest
-      #     $ErrorActionPreference = "Stop"
-      #     $VerbosePreference = "Continue"
-      #     $InformationPreference = "Continue"
-
-      #     Write-Information "Emptying artifacts folder..."
-      #     $artifactsFolderPath = "${{ env.ARTIFACTS_FOLDER_PATH }}"
-      #     if (Test-Path $artifactsFolderPath)
-      #     {
-      #       $artifactsFolderChildren = Join-Path "$env:API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH" "*"
-      #       Remove-Item $artifactsFolderChildren -Recurse -Force
-      #     }
-
-      #     Write-Information "Downloading extractor..."
-      #     $extractorFileName = "${{ runner.os }}" -like "*win*" ? "extractor.win-x64.exe" : "extractor.linux-x64.exe"
-      #     $downloadUrl = "https://github.com/Azure/apiops/releases/download/${{ env.APIOPS_RELEASE }}/$extractorFileName"
-      #     $destinationFilePath = Join-Path "${{ runner.temp }}" "extractor.exe"
-      #     Invoke-WebRequest -Uri "$downloadUrl" -OutFile "$destinationFilePath"
-
-      #     if ("${{ runner.os }}" -like "*linux*")
-      #     {
-      #       Write-Information "Setting file permissions..."
-      #       & chmod +x "$destinationFilePath"
-      #       if ($LASTEXITCODE -ne 0) { throw "Setting file permissions failed."}
-      #     }
-
-      #     Write-Information "Running extractor..."
-      #     & "$destinationFilePath"              
-      #     if ($LASTEXITCODE -ne 0) { throw "Running extractor failed."}
-      #   shell: pwsh
-      #   env:
-      #     AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      #     AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      #     AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      #     AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      #     AZURE_RESOURCE_GROUP_NAME: ${{ vars.AZURE_RESOURCE_GROUP_NAME }}
-      #     API_MANAGEMENT_SERVICE_NAME: ${{ vars.DEV_API_MANAGEMENT_SERVICE_NAME }}
-      #     API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH: "${{ env.ARTIFACTS_FOLDER_PATH }}"
-
-      # - name: Create artifacts pull request
-      #   uses: peter-evans/create-pull-request@v3
-      #   with:
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     commit-message: "Extractor commit"
-      #     title: "Autogenerated extractor PR by run ${{ github.run_id }} on workflow ${{ github.workflow }}"
-      #     body: >
-      #       This PR is auto-generated by Github actions workflow
-      #     labels: extractor, automated pr 
+          Write-Information "Running publisher..."
+          & "$destinationFilePath"              
+          if ($LASTEXITCODE -ne 0) { throw "Running publisher failed."}
+        shell: pwsh
+        env:
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          AZURE_RESOURCE_GROUP_NAME: ${{ vars.AZURE_RESOURCE_GROUP_NAME }}
