@@ -27,15 +27,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set shared variables2
+      - name: Set shared variables
         run: |
           Set-StrictMode -Version Latest
           $ErrorActionPreference = "Stop"
           $VerbosePreference = "Continue"
           $InformationPreference = "Continue"
-
-          # $artifactsFolderPath = Join-Path ${{ github.workspace }} "artifacts"
-          # "ARTIFACTS_FOLDER_PATH=$artifactsFolderPath" >> $env:GITHUB_ENV
+          
+          Write-Information "Input is ${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }}"
         shell: pwsh
 
       # - name: Set variables
