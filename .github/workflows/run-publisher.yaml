@@ -27,28 +27,39 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set variables
+      - name: Set shared variables2
         run: |
           Set-StrictMode -Version Latest
           $ErrorActionPreference = "Stop"
           $VerbosePreference = "Continue"
           $InformationPreference = "Continue"
 
-          # Write-Information "Input is ${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }}"
-          # if (${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }})
-          # {
-          #   "COMMIT_ID=${{ github.sha }}" >> $env:GITHUB_ENV
-          # }
-
-          # $configurationYamlPath = Join-Path ${{ github.workspace }} "configuration.${{ matrix.environment }}.yaml"
-          # if (Test-Path $configurationYamlPath)
-          # { 
-          #   "CONFIGURATION_YAML_PATH=$configurationYamlPath" >> $env:GITHUB_ENV
-          # }
-
-          # $serviceNames = ${{ fromJson(vars)}}
-          # Write-Information $serviceNames
+          # $artifactsFolderPath = Join-Path ${{ github.workspace }} "artifacts"
+          # "ARTIFACTS_FOLDER_PATH=$artifactsFolderPath" >> $env:GITHUB_ENV
         shell: pwsh
+
+      # - name: Set variables
+      #   run: |
+      #     Set-StrictMode -Version Latest
+      #     $ErrorActionPreference = "Stop"
+      #     $VerbosePreference = "Continue"
+      #     $InformationPreference = "Continue"
+
+      #     Write-Information "Input is ${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }}"
+      #     if (${{ github.event.inputs.ONLY_PUBLISH_LAST_COMMIT }})
+      #     {
+      #       "COMMIT_ID=${{ github.sha }}" >> $env:GITHUB_ENV
+      #     }
+
+      #     # $configurationYamlPath = Join-Path ${{ github.workspace }} "configuration.${{ matrix.environment }}.yaml"
+      #     # if (Test-Path $configurationYamlPath)
+      #     # { 
+      #     #   "CONFIGURATION_YAML_PATH=$configurationYamlPath" >> $env:GITHUB_ENV
+      #     # }
+
+      #     # $serviceNames = ${{ fromJson(vars)}}
+      #     # Write-Information $serviceNames
+      #   shell: pwsh
 
       # - name: Run extractor
       #   run: |
