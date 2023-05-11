@@ -49,17 +49,21 @@ jobs:
           }
 
           Write-Information "Setting API management service name..."
+          $serviceName = ""
           switch ("${{ matrix.environment }}")
           {
-            "dev" { "API_MANAGEMENT_SERVICE_NAME=${{ vars.DEV_API_MANAGEMENT_SERVICE_NAME }}" >> $env:GITHUB_ENV }
-            "prod" { "API_MANAGEMENT_SERVICE_NAME=${{ vars.PROD_API_MANAGEMENT_SERVICE_NAME }}" >> $env:GITHUB_ENV }
-            default { throw "No value found for matrix environment."}
+            "dev" { $serviceName = "${{ vars.DEV_API_MANAGEMENT_SERVICE_NAME }}" }
+            "prod" { $serviceName = "${{ vars.PROD_API_MANAGEMENT_SERVICE_NAME }}" }
           }
+          if ([string]::IsNullOrWhiteSpace($serviceName))
+          {
+            throw "Service name cannot be empty."
+          }
+          "API_MANAGEMENT_SERVICE_NAME=$serviceName" >> $env:GITHUB_ENV
 
           Write-Information "Setting artifacts folder..."
           $artifactsFolderPath = Join-Path ${{ github.workspace }} "artifacts"
           "API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH=$artifactsFolderPath" >> $env:GITHUB_ENV
-
         shell: pwsh
 
       - name: Run publisher
