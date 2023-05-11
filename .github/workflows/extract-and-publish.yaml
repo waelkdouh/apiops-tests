@@ -1,0 +1,47 @@
+name: Extract and publish
+
+on:
+  workflow_dispatch:
+
+env:
+  APIOPS_RELEASE: v4.1.3
+    
+jobs:
+  run_extractor:
+    name: Run extractor
+    runs-on: "ubuntu-latest"
+    env:
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_RESOURCE_GROUP_NAME: ${{ vars.AZURE_RESOURCE_GROUP_NAME }}
+      API_MANAGEMENT_SERVICE_NAME: ${{ vars.DEV_API_MANAGEMENT_SERVICE_NAME }}
+      API_MANAGEMENT_SERVICE_OUTPUT_FOLDER_PATH: "${{ runner.temp }}/apim-artifacts"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download extractor
+        run: |
+          Set-StrictMode -Version Latest
+          $ErrorActionPreference = "Stop"
+          $VerbosePreference = "Continue"
+          $InformationPreference = "Continue"
+
+          Write-Information "Downloading extractor..."
+          $extractorFileName = "${{ runner.os }}" -like "*win*" ? "extractor.win-x64.exe" : "extractor.linux-x64.exe"
+          $downloadUrl = "https://github.com/Azure/apiops/releases/download/${{ env.APIOPS_RELEASE }}/$extractorFileName"
+          $destinationFilePath = Join-Path "${{ runner.temp }}" "extractor.exe"
+          Invoke-WebRequest -Uri "$downloadUrl" -OutFile "$destinationFilePath"
+
+          if ("${{ runner.os }}" -like "*linux*")
+          {
+            Write-Information "Setting file permissions..."
+            & chmod +x "$destinationFilePath"
+            if ($LASTEXITCODE -ne 0) { throw "Setting file permissions failed."}
+          }
+
+          & "$destinationFilePath"              
+          if ($LASTEXITCODE -ne 0) { throw "Running extractor failed."}
+        shell: pwsh
