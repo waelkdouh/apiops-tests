@@ -72,7 +72,7 @@ jobs:
         shell: pwsh
 
       - name: Run publisher in branch
-        if: github.event.inputs.PUBLISHER_SOURCE == "branch"
+        if: github.event.inputs.PUBLISHER_SOURCE == 'branch'
         run: |
           Set-StrictMode -Version Latest
           $ErrorActionPreference = "Stop"
@@ -97,7 +97,7 @@ jobs:
           AZURE_RESOURCE_GROUP_NAME: ${{ vars.AZURE_RESOURCE_GROUP_NAME }}
 
       - name: Run publisher in release
-        if: github.event.inputs.PUBLISHER_SOURCE == "release"
+        if: github.event.inputs.PUBLISHER_SOURCE == 'release'
         run: |
           Set-StrictMode -Version Latest
           $ErrorActionPreference = "Stop"
