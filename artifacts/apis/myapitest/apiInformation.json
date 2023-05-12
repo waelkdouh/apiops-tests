@@ -1,6 +1,6 @@
 {
   "properties": {
-    "apiRevision": "1",
+    "apiRevision": "3",
     "authenticationSettings": {},
     "description": "",
     "displayName": "myapitest",
@@ -9,6 +9,7 @@
     "protocols": [
       "https"
     ],
+    "serviceUrl": "https://apiopskdalfddev.azure-api.net",
     "subscriptionKeyParameterNames": {
       "header": "Ocp-Apim-Subscription-Key",
       "query": "subscription-key"
