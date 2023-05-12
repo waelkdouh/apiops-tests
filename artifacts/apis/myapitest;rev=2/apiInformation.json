@@ -8,6 +8,7 @@
     "protocols": [
       "https"
     ],
+    "serviceUrl": "https://apiopskdalfddev.azure-api.net",
     "subscriptionKeyParameterNames": {
       "header": "Ocp-Apim-Subscription-Key",
       "query": "subscription-key"
