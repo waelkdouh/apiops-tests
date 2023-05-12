@@ -80,7 +80,7 @@ jobs:
           $InformationPreference = "Continue"
 
           Write-Information "Getting branch code..."
-          $codeFolderPath = Join-Path "${{ runner.temp} }" "code"
+          $codeFolderPath = Join-Path "${{ runner.temp }}" "code"
           git clone --branch "${{ vars.APIOPS_BRANCH_NAME }}" "https://github.com/Azure/apiops.git" "$codeFolderPath"              
           if ($LASTEXITCODE -ne 0) { throw "Cloning branch failed."}
 
