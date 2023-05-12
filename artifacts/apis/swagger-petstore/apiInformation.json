@@ -1,6 +1,6 @@
 {
   "properties": {
-    "apiRevision": "2",
+    "apiRevision": "3",
     "authenticationSettings": {},
     "contact": {
       "email": "apiteam@swagger.io",
