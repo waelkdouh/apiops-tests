@@ -1,7 +1,6 @@
 {
   "properties": {
-    "apiRevision": "2",
-    "apiRevisionDescription": "this is a temp revision for the test api",
+    "apiRevision": "1",
     "authenticationSettings": {},
     "description": "",
     "displayName": "testapi",
@@ -9,7 +8,7 @@
     "protocols": [
       "https"
     ],
-    "serviceUrl": "https://apim-wk.azure-api.net/test/rev2",
+    "serviceUrl": "https://apim-wk.azure-api.net/test",
     "subscriptionKeyParameterNames": {
       "header": "Ocp-Apim-Subscription-Key",
       "query": "subscription-key"
