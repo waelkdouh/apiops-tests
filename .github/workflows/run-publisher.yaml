@@ -59,7 +59,7 @@ jobs:
           switch ("${{ matrix.environment }}")
           {
             "dev" { $serviceName = "${{ vars.DEV_API_MANAGEMENT_SERVICE_NAME }}"; $resourceGroupName = "${{ vars.DEV_AZURE_RESOURCE_GROUP_NAME }}" }
-            "prod" { $serviceName = "${{ vars.PROD_API_MANAGEMENT_SERVICE_NAME }}" $resourceGroupName = "${{ vars.PROD_AZURE_RESOURCE_GROUP_NAME }}" }
+            "prod" { $serviceName = "${{ vars.PROD_API_MANAGEMENT_SERVICE_NAME }}"; $resourceGroupName = "${{ vars.PROD_AZURE_RESOURCE_GROUP_NAME }}" }
           }
           if ([string]::IsNullOrWhiteSpace($serviceName))
           {
