@@ -10,7 +10,7 @@ on:
           - branch
           - release
         required: true
-        default: release
+        default: branch
       ONLY_PUBLISH_LAST_COMMIT:
         description: "Only publish artifacts modified in last commit"
         type: boolean
